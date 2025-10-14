@@ -3,11 +3,12 @@ import ptbot
 import pytimeparse
 from dotenv import load_dotenv
 from pytimeparse import parse
+from decouple import config
 
 
 load_dotenv()
-TG_TOKEN = os.getenv('TG_TOKEN')
-TG_CHAT_ID = os.getenv('TG_CHAT_ID')
+TG_TOKEN = config('TG_TOKEN')
+TG_CHAT_ID = config('TG_CHAT_ID')
 
 
 def make_wait(bot):
