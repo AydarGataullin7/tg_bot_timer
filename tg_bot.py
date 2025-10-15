@@ -6,7 +6,6 @@ from pytimeparse import parse
 from decouple import config
 
 
-load_dotenv()
 TG_TOKEN = config('TG_TOKEN')
 TG_CHAT_ID = config('TG_CHAT_ID')
 
@@ -49,6 +48,7 @@ def make_answer(bot):
 
 
 def main():
+    load_dotenv()
     bot = ptbot.Bot(TG_TOKEN)
     bot.reply_on_message(make_wait(bot))
     bot.run_bot()
