@@ -8,19 +8,18 @@ from decouple import config
 
 TG_TOKEN = config('TG_TOKEN')
 TG_CHAT_ID = config('TG_CHAT_ID')
-bot = ptbot.Bot(TG_TOKEN)
 
 
-def wait(chat_id, message):
+def wait(chat_id, message, bot):
     seconds = parse(message)
     message_id = bot.send_message(
         chat_id, "Таймер установлен на: {0} секунд".format(seconds))
     bot.create_countdown(seconds, notify_progress,
-                         chat_id=chat_id, message_id=message_id, total_seconds=seconds)
-    bot.create_timer(seconds + 0.1, answer, chat_id=chat_id)
+                         chat_id=chat_id, message_id=message_id, total_seconds=seconds, bot=bot)
+    bot.create_timer(seconds + 0.1, answer, chat_id=chat_id, bot=bot)
 
 
-def notify_progress(secs_left, chat_id, message_id, total_seconds):
+def notify_progress(secs_left, chat_id, message_id, total_seconds, bot):
     progressbar = render_progressbar(total_seconds, total_seconds - secs_left)
     progress_message = "Осталось секунд: {0}\n{1}".format(
         secs_left, progressbar)
@@ -36,14 +35,15 @@ def render_progressbar(total, iteration, prefix='', suffix='', length=30, fill='
     return '{0} |{1}| {2}% {3}'.format(prefix, pbar, percent, suffix)
 
 
-def answer(chat_id):
+def answer(chat_id, bot):
     answer = "Время вышло!"
     bot.send_message(chat_id, answer)
 
 
 def main():
     load_dotenv()
-    bot.reply_on_message(wait)
+    bot = ptbot.Bot(TG_TOKEN)
+    bot.reply_on_message(lambda chat_id, message: wait(chat_id, message, bot))
     bot.run_bot()
 
 
