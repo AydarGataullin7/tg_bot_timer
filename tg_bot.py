@@ -1,7 +1,6 @@
 import os
 import ptbot
 import pytimeparse
-from dotenv import load_dotenv
 from pytimeparse import parse
 from decouple import config
 
@@ -41,7 +40,6 @@ def answer(chat_id, bot):
 
 
 def main():
-    load_dotenv()
     bot = ptbot.Bot(TG_TOKEN)
     bot.reply_on_message(lambda chat_id, message: wait(chat_id, message, bot))
     bot.run_bot()
